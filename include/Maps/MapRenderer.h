@@ -13,8 +13,12 @@ class MapRenderer
 
         void renderLayer(SDL_Renderer* renderer, int index);
 
+
     private:
         Map* map;
+
+        void renderFromTileSet(SDL_Renderer* renderer, short val, SDL_Rect tileRect);
+        void renderFromTxtVector(SDL_Renderer* renderer, short val, SDL_Rect tileRect);
 
 };
 

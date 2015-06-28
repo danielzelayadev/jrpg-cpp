@@ -12,13 +12,8 @@ MapRenderer::MapRenderer(Map* m)
 
 void MapRenderer::render(SDL_Renderer* renderer)
 {
-   if(map->getTextureCount() > 0)
       for(int i = 0; i < map->getLayerCount(); i++)
          renderLayer(renderer, i);
-
-   else if(map->getTileset())
-   {
-   }
 }
 
 void MapRenderer::renderLayer(SDL_Renderer* renderer, int index)
@@ -29,23 +24,31 @@ void MapRenderer::renderLayer(SDL_Renderer* renderer, int index)
 
    if(layer->isShown())
    {
-      char** blueprint = layer->getBlueprint();
+      short** blueprint = layer->getBlueprint();
 
       for(int i = 0; i < map->getTilesY(); i++, tileRect.y += tileRect.h)
       {
          tileRect.x = 0;
          for(int k = 0; k < map->getTilesX(); k++, tileRect.x+=tileRect.w)
          {
-            if(blueprint[i][k] != '/')
+            if(blueprint[i][k] != -1)
             {
-              stringstream strm;
-              int indx = 0;
-              strm << blueprint[i][k];
-              strm >> indx;
-
-              SDL_RenderCopy(renderer, map->getTexture(indx), 0, &tileRect);
+               if(map->getTextureCount() > 0)
+                 renderFromTxtVector(renderer, blueprint[i][k], tileRect);
+               else if(map->getTileset())
+                 renderFromTileSet(renderer, blueprint[i][k], tileRect);
             }
          }
       }
     }
+}
+
+void MapRenderer::renderFromTxtVector(SDL_Renderer* renderer, short val, SDL_Rect tileRect)
+{
+   SDL_RenderCopy(renderer, map->getTexture(val), 0, &tileRect);
+}
+
+void MapRenderer::renderFromTileSet(SDL_Renderer* renderer, short val, SDL_Rect tileRect)
+{
+   int rowMax = map->getTilesX();
 }

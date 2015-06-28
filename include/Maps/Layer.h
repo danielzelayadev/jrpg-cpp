@@ -12,8 +12,8 @@ class Layer
         Layer(string name);
 
         string getName(){return name;}
-        char** getBlueprint(){return blueprint;}
-        void setBlueprint(char** blueprint) {this->blueprint = blueprint;}
+        short** getBlueprint(){return blueprint;}
+        void setBlueprint(short** blueprint) {this->blueprint = blueprint;}
 
         void setShown(bool s) {shown = s;}
         bool isShown() {return shown;}
@@ -21,7 +21,7 @@ class Layer
     private:
         string name;
 
-        char** blueprint;
+        short** blueprint;
 
         bool shown;
 };
