@@ -206,7 +206,14 @@ void MapParser::readLayerSubBlock(Map* map, int layerNo)
     string line;
     Layer* layer = map->getLayer(layerNo-1);
 
-    string blueprint("");
+    char** blueprint = new char*[map->getTilesY()];
+
+    for(int i = 0; i < map->getTilesY(); i++)
+    {
+        blueprint[i] = new char[map->getTilesX()];
+        for(int k = 0; k < map->getTilesX(); k++)
+            blueprint[i][k] = '/';
+    }
 
     while(true)
     {
@@ -218,38 +225,85 @@ void MapParser::readLayerSubBlock(Map* map, int layerNo)
       {
          char readChar = line.at(i);
 
-         if(i < line.size()-1 && line.at(i+1) == '(')
-         {
-           int repeatX = 0, repeatY = 1;
+         if(readChar == '[')
+           stamp(line, blueprint, &i);
 
-           i+=2;
-           getRepeats(line, &i, &repeatX, &repeatY);
-
-//           cout << repeatX << endl;
-//           cout << repeatY << endl << endl;
-
-           for(int k = 0; k < repeatY; k++)
-           {
-              for(int j = 0; j < map->getTilesX(); j++)
-              {
-                 if(j < repeatX)
-                   blueprint.push_back(readChar);
-                 else
-                   blueprint.push_back('/');
-              }
-           }
-
-           continue;
-         }
-
-         blueprint.push_back(readChar);
       }
 
     }
 
     layer->setBlueprint(blueprint);
-//    cout << "----- Layer " << layerNo << " Blueprint -----" << endl;
-//    cout << layer->getBlueprint() << endl << endl;
+    cout << "----- Layer " << layerNo << " Blueprint -----" << endl;
+    for(int i = 0; i < map->getTilesY(); i++)
+    {
+        for(int k = 0; k < map->getTilesX(); k++)
+           cout << layer->getBlueprint()[i][k];
+        cout << endl;
+    }
+
+    cout << endl;
+}
+
+void MapParser::stamp(string line, char** blueprint, int* ind)
+{
+    (*ind)++;
+    int sx = 0, sy = 0;
+    getStartPoint(line, ind, &sx, &sy);
+
+    char txtVal = line.at(*ind);
+
+    (*ind)++;
+
+    int rx = 0, ry = 0;
+
+    if(line.at(*ind) == '(') { (*ind)++; getRepeats(line, ind, &rx, &ry);}
+
+    for(int i = sy; i < sy+ry+1; i++)
+        for(int k = sx; k < sx+rx+1; k++)
+           blueprint[i][k] = txtVal;
+}
+
+void MapParser::getStartPoint(string line, int* ind, int* sx, int* sy)
+{
+    stringstream strmX, strmY;
+    string stx(""), sty("");
+
+    bool goX = true;
+
+    while(true)
+    {
+       char c = line.at(*ind);
+
+       if(c == ']')
+       {
+          strmX << stx;
+          strmX >> *sx;
+
+          if(!goX)
+          {
+            strmY << sty;
+            strmY >> *sy;
+          }
+
+          (*ind)++;
+          break;
+       }
+
+       if(c == ',')
+       {
+          goX = false;
+          (*ind)++;
+          continue;
+       }
+
+       if(goX)
+          stx.push_back(c);
+       else
+          sty.push_back(c);
+
+
+       (*ind)++;
+    }
 }
 
 void MapParser::getRepeats(string line, int* ind, int* rx, int* ry)

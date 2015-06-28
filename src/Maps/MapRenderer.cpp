@@ -27,29 +27,25 @@ void MapRenderer::renderLayer(SDL_Renderer* renderer, int index)
 
    SDL_Rect tileRect = {0, 0, map->getTileWidth(), map->getTileHeight()};
 
-   int tilesXCtr = 0;
-   int tilesYCtr = 0;
-
    if(layer->isShown())
    {
-      string blueprint = layer->getBlueprint();
+      char** blueprint = layer->getBlueprint();
 
-      for(int i = 0; i < blueprint.size(); i++)
+      for(int i = 0; i < map->getTilesY(); i++, tileRect.y += tileRect.h)
       {
-         if(blueprint.at(i) != '/')
+         tileRect.x = 0;
+         for(int k = 0; k < map->getTilesX(); k++, tileRect.x+=tileRect.w)
          {
-         stringstream strm;
-         int indx = 0;
-         strm << blueprint.at(index);
-         strm >> indx;
+            if(blueprint[i][k] != '/')
+            {
+              stringstream strm;
+              int indx = 0;
+              strm << blueprint[i][k];
+              strm >> indx;
 
-         SDL_RenderCopy(renderer, map->getTexture(indx), 0, &tileRect);
+              SDL_RenderCopy(renderer, map->getTexture(indx), 0, &tileRect);
+            }
          }
-
-         tilesXCtr++;
-         tileRect.x += tileRect.w;
-
-         if(tilesXCtr >= map->getTilesX()) {tilesXCtr = 0; tileRect.x = 0; tilesYCtr++; tileRect.y += tileRect.h;}
       }
     }
 }
