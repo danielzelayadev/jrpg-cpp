@@ -14,7 +14,7 @@ MapParser::MapParser(SDL_Renderer* renderer)
 
 Map* MapParser::parse(string mapDir)
 {
-    if(!strstr(mapDir.c_str(), ".mp")) return nullptr;
+    if(!strstr(mapDir.c_str(), ".mml")) return nullptr;
 
     reader->open(mapDir);
 
