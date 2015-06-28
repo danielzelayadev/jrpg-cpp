@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="JRPG" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin/Debug/JRPG" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+					<Add directory="include" />
+					<Add directory="include/Screens" />
+					<Add directory="include/Input" />
+					<Add directory="include/Maps" />
+				</Compiler>
+			</Target>
+			<Target title="Release">
+				<Option output="bin/Release/JRPG" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+					<Add directory="include" />
+					<Add directory="include/Screens" />
+					<Add directory="include/Input" />
+					<Add directory="include/Maps" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+			<Add option="-fexceptions" />
+		</Compiler>
+		<Unit filename="include/Input/Input.h" />
+		<Unit filename="include/Input/TestInput.h" />
+		<Unit filename="include/Maps/Layer.h" />
+		<Unit filename="include/Maps/Map.h" />
+		<Unit filename="include/Maps/MapParser.h" />
+		<Unit filename="include/Maps/MapRenderer.h" />
+		<Unit filename="include/Maps/Tile.h" />
+		<Unit filename="include/Screens/Screen.h" />
+		<Unit filename="include/Screens/ScreenManager.h" />
+		<Unit filename="include/Screens/TestScreen.h" />
+		<Unit filename="include/UI/Button.h" />
+		<Unit filename="include/UI/UI.h" />
+		<Unit filename="main.cpp" />
+		<Unit filename="src/Input/Input.cpp" />
+		<Unit filename="src/Input/TestInput.cpp" />
+		<Unit filename="src/Maps/Layer.cpp" />
+		<Unit filename="src/Maps/Map.cpp" />
+		<Unit filename="src/Maps/MapParser.cpp" />
+		<Unit filename="src/Maps/MapRenderer.cpp" />
+		<Unit filename="src/Maps/Tile.cpp" />
+		<Unit filename="src/Screens/Screen.cpp" />
+		<Unit filename="src/Screens/ScreenManager.cpp" />
+		<Unit filename="src/Screens/TestScreen.cpp" />
+		<Unit filename="src/UI/Button.cpp" />
+		<Unit filename="src/UI/UI.cpp" />
+		<Extensions>
+			<code_completion />
+			<debugger />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>
