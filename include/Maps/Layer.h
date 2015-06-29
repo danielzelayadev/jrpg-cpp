@@ -6,14 +6,22 @@
 
 using namespace std;
 
+struct BlueprintData
+{
+   short textureIndex;
+   short flag;
+   bool crop;
+   short cropX, cropW, cropY, cropH;
+};
+
 class Layer
 {
     public:
         Layer(string name);
 
         string getName(){return name;}
-        short** getBlueprint(){return blueprint;}
-        void setBlueprint(short** blueprint) {this->blueprint = blueprint;}
+        BlueprintData** getBlueprint(){return blueprint;}
+        void setBlueprint(BlueprintData** blueprint) {this->blueprint = blueprint;}
 
         void setShown(bool s) {shown = s;}
         bool isShown() {return shown;}
@@ -21,7 +29,7 @@ class Layer
     private:
         string name;
 
-        short** blueprint;
+        BlueprintData** blueprint;
 
         bool shown;
 };

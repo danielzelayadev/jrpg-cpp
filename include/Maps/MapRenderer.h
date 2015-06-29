@@ -17,7 +17,7 @@ class MapRenderer
     private:
         Map* map;
 
-        void renderFromTileSet(SDL_Renderer* renderer, short val, SDL_Rect tileRect);
+        void renderFromTileSet(SDL_Renderer* renderer, BlueprintData bd, SDL_Rect tileRect);
         void renderFromTxtVector(SDL_Renderer* renderer, short val, SDL_Rect tileRect);
 
 };

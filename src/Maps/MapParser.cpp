@@ -206,13 +206,21 @@ void MapParser::readLayerSubBlock(Map* map, int layerNo)
     string line;
     Layer* layer = map->getLayer(layerNo-1);
 
-    short** blueprint = new short*[map->getTilesY()];
+    BlueprintData** blueprint = new BlueprintData*[map->getTilesY()];
 
     for(int i = 0; i < map->getTilesY(); i++)
     {
-        blueprint[i] = new short[map->getTilesX()];
+        blueprint[i] = new BlueprintData[map->getTilesX()];
         for(int k = 0; k < map->getTilesX(); k++)
-            blueprint[i][k] = -1;
+        {
+           blueprint[i][k].textureIndex = -1;
+           blueprint[i][k].flag = -1;
+           blueprint[i][k].cropX = 0;
+           blueprint[i][k].cropY = 0;
+           blueprint[i][k].cropW = 0;
+           blueprint[i][k].cropH = 0;
+           blueprint[i][k].crop = false;
+        }
     }
 
     while(true)
@@ -226,7 +234,28 @@ void MapParser::readLayerSubBlock(Map* map, int layerNo)
          char readChar = line.at(i);
 
          if(readChar == '[')
-           stamp(line, blueprint, &i);
+         {
+           i++;
+           int sx = 0, sy = 0;
+           getStartPoint(line, &i, &sx, &sy);
+
+           BlueprintData bd;
+           bd.textureIndex = -1;
+
+           if(line.at(i) == '{')
+           {
+              i++;
+              bd.crop = true;
+              crop(line, blueprint, &i, bd, sx, sy);
+           }
+           else
+           {
+             bd.crop = false;
+             getTxtValue(line, &i, &(bd.textureIndex));
+             stamp(line, blueprint, &i, bd, sx, sy);
+           }
+
+         }
 
       }
 
@@ -237,30 +266,97 @@ void MapParser::readLayerSubBlock(Map* map, int layerNo)
     for(int i = 0; i < map->getTilesY(); i++)
     {
         for(int k = 0; k < map->getTilesX(); k++)
-           cout << layer->getBlueprint()[i][k];
+        {
+           if(!layer->getBlueprint()[i][k].crop)
+           cout << layer->getBlueprint()[i][k].textureIndex;
+           else
+           cout << "C";
+        }
         cout << endl;
     }
 
     cout << endl;
 }
 
-void MapParser::stamp(string line, short** blueprint, int* ind)
+void MapParser::crop(string line, BlueprintData** blueprint, int* ind, BlueprintData bd, int sx, int sy)
 {
-    (*ind)++;
-    int sx = 0, sy = 0;
-    getStartPoint(line, ind, &sx, &sy);
+    getCropRect(line, ind, &bd);
+    stamp(line, blueprint, ind, bd, sx, sy);
+}
 
-    short txtVal = -1;
+void MapParser::getCropRect(string line, int* ind, BlueprintData* bd)
+{
+   stringstream strmX, strmY, strmW, strmH;
+   string stx(""), sty(""), stw(""), sth("");
 
-    getTxtValue(line, ind, &txtVal);
+   int current = 0;
 
+   while(true)
+   {
+      char c = line.at(*ind);
+
+      if(c == '}')
+      {
+          if(stx.size() > 0)
+          {
+            strmX << stx;
+            strmX >> bd->cropX;
+          }
+
+          if(sty.size() > 0)
+          {
+            strmY << sty;
+            strmY >> bd->cropY;
+          }
+
+          if(stw.size() > 0)
+          {
+            strmW << stw;
+            strmW >> bd->cropW;
+          }
+
+          if(sth.size() > 0)
+          {
+            strmH << sth;
+            strmH >> bd->cropH;
+          }
+
+          (*ind)++;
+          break;
+      }
+
+      if(c == ',') { current++; (*ind)++; continue; }
+
+      switch(current)
+      {
+         case 0:
+         stx.push_back(c);
+         break;
+         case 1:
+         sty.push_back(c);
+         break;
+         case 2:
+         stw.push_back(c);
+         break;
+         case 3:
+         sth.push_back(c);
+         break;
+      }
+
+      (*ind)++;
+   }
+
+}
+//14,4
+void MapParser::stamp(string line, BlueprintData** blueprint, int* ind, BlueprintData bd, int sx, int sy)
+{
     int rx = 0, ry = 0;
 
     if((*ind) < line.size() && line.at(*ind) == '(') { (*ind)++; getRepeats(line, ind, &rx, &ry);}
 
     for(int i = sy; i < sy+ry+1; i++)
         for(int k = sx; k < sx+rx+1; k++)
-           blueprint[i][k] = txtVal;
+           blueprint[i][k] = bd;
 }
 
 void MapParser::getStartPoint(string line, int* ind, int* sx, int* sy)

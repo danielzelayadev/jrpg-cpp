@@ -33,7 +33,10 @@ class MapParser
 
         void readLayerSubBlock(Map* map, int layerNo);
 
-        void stamp(string line, short** blueprint, int* ind);
+        void crop(string line, BlueprintData** blueprint, int* ind, BlueprintData bd, int sx, int sy);
+        void getCropRect(string line, int* ind, BlueprintData* bd);
+
+        void stamp(string line, BlueprintData** blueprint, int* ind, BlueprintData bd, int sx, int sy);
         void getTxtValue(string line, int* ind, short* val);
         void getStartPoint(string line, int* ind, int* sx, int* sy);
         void getRepeats(string line, int* ind, int* rx, int* ry);
