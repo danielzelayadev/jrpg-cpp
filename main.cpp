@@ -3,7 +3,7 @@
 
 int main()
 {
-    ScreenManager sm("JRPG", 1024, 700);
+    ScreenManager sm("JRPG", 1024, 672);
 
     sm.setCurrentScreen(new TestScreen(&sm));
 

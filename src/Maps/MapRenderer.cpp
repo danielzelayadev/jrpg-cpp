@@ -1,5 +1,7 @@
 #include "MapRenderer.h"
 
+#include <cmath>
+
 #include <sstream>
 #include <iostream>
 
@@ -50,5 +52,11 @@ void MapRenderer::renderFromTxtVector(SDL_Renderer* renderer, short val, SDL_Rec
 
 void MapRenderer::renderFromTileSet(SDL_Renderer* renderer, short val, SDL_Rect tileRect)
 {
-   int rowMax = map->getTilesX();
+   int rowMax = map->getTilesetWidth()/map->getTileWidth();
+   int rowIndx = val / rowMax;
+   int colIndx = abs((rowIndx*rowMax)-val);
+
+   SDL_Rect crop = {colIndx*map->getTileWidth(), rowIndx*map->getTileHeight(), tileRect.w, tileRect.h};
+
+   SDL_RenderCopy(renderer, map->getTileset(), &crop, &tileRect);
 }

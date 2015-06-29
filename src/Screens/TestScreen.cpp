@@ -10,7 +10,7 @@ void TestScreen::init()
 
    MapParser parser(sm->renderer);
 
-   screenMap = parser.parse("Assets/Screens/Test/MapTest2.mml");
+   screenMap = parser.parse("Assets/Screens/Test/MapTest3.mml");
 
    mRenderer = new MapRenderer(screenMap);
 

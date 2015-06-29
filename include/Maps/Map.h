@@ -24,7 +24,8 @@ class Map
         void showLayer(int i);
         void showLayer(string name);
 
-        void setTileset(SDL_Texture* tileset) {this->tileset = tileset;}
+        void setTileset(SDL_Texture* tileset) {this->tileset = tileset; SDL_QueryTexture(tileset, 0, 0,
+        &tilesetWidth, &tilesetHeight);}
 
         void setTilesX(int tx) {tilesX = tx;}
         void setTilesY(int ty) {tilesY = ty;}
@@ -38,6 +39,8 @@ class Map
         int getTileWidth()  {return tileWidth;}
         int getTileHeight()  {return tileHeight;}
         int getLayerCount()  {return layers.size();}
+        int getTilesetWidth()  {return tilesetWidth;}
+        int getTilesetHeight()  {return tilesetHeight;}
 
         SDL_Texture* getTileset() {return tileset;}
         SDL_Texture* getTexture(int i) {return tileTextures.at(i);}
@@ -53,7 +56,8 @@ class Map
 
         int width, height,
             tilesX, tilesY,
-            tileWidth, tileHeight;
+            tileWidth, tileHeight,
+            tilesetWidth, tilesetHeight;
 
 };
 
