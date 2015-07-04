@@ -10,7 +10,19 @@ class ObjectLayer : public Layer
         ObjectLayer();
         ~ObjectLayer();
 
+        void addObject(MapObject* obj);
+        void removeObject(MapObject* obj);
+        void removeObject(int i);
+        void removeObject(string name);
+
+        MapObject* getObject(int i);
+        MapObject* getObject(string name);
+
+        friend class TMXParser;
+
+    private:
         vector<MapObject*> objects;
+
 };
 
 #endif // OBJECTLAYER_H

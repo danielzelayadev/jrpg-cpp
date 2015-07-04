@@ -27,6 +27,9 @@ class Map
         int getLayerCount() { return layers.size(); }
         int getTilesetCount() { return tilesets.size(); }
 
+        Layer* getLayer(string name);
+        Layer* getLayer(int i);
+
         friend class TMXParser;
         friend class MapRenderer;
 

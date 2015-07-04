@@ -46,3 +46,20 @@ void Map::print()
    cout << "\t\t----Render Order----\n";
     cout << "\t\t\t" << renderOrder << endl;
 }
+
+Layer* Map::getLayer(string name)
+{
+   for(int i = 0; i < layers.size(); i++)
+      if(!strcmp( layers[i]->name.c_str(), name.c_str() ))
+         return layers[i];
+
+   return nullptr;
+}
+
+Layer* Map::getLayer(int i)
+{
+    if(i >= 0 && i < layers.size())
+      return layers[i];
+
+    return nullptr;
+}
