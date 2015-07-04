@@ -54,7 +54,6 @@
 		<Unit filename="include/TMX/Layer.h" />
 		<Unit filename="include/TMX/Map.h" />
 		<Unit filename="include/TMX/MapObject.h" />
-		<Unit filename="include/TMX/MapStructs.h" />
 		<Unit filename="include/TMX/ObjectLayer.h" />
 		<Unit filename="include/TMX/PolygonMapObject.h" />
 		<Unit filename="include/TMX/PolylineMapObject.h" />
