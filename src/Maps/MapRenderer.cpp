@@ -1,5 +1,8 @@
 #include "MapRenderer.h"
 
+#include "TMX/ObjectLayer.h"
+#include "TMX/RectangleMapObject.h"
+
 #include <cmath>
 
 #include <sstream>
@@ -12,6 +15,9 @@ MapRenderer::MapRenderer(Map* m, SDL_Renderer* renderer, SDL_Rect* camera)
     map = m;
     this->renderer = renderer;
     this->camera = camera;
+
+    camCachedX = camera->x;
+    camCachedY = camera->y;
 
     for(int i = 0; i < map->tilesets.size(); i++)
     {
@@ -40,6 +46,24 @@ MapRenderer::MapRenderer(Map* m, SDL_Renderer* renderer, SDL_Rect* camera)
 
     totalScreenTiles = screenTilesX*screenTilesY;
     cout << totalScreenTiles << endl;
+}
+
+void MapRenderer::update()
+{
+   if(camCachedX > camera->x)
+      pushObjects(RIGHT);
+
+   else if(camCachedX < camera->x)
+      pushObjects(LEFT);
+
+   if(camCachedY > camera->y)
+      pushObjects(DOWN);
+
+   else if(camCachedY < camera->y)
+      pushObjects(UP);
+
+   camCachedX = camera->x;
+   camCachedY = camera->y;
 }
 
 void MapRenderer::render()
@@ -113,6 +137,30 @@ void MapRenderer::skipIndx(int& indx)
 
     if(diffX)
     indx += diffX;
+}
+
+void MapRenderer::pushObjects(int dir)
+{
+   for(int i = 0; i < map->layers.size(); i++)
+   {
+       if(map->layers[i]->type == 'O')
+       {
+           ObjectLayer* oLayer = (ObjectLayer*)map->layers[i];
+
+           for(int k = 0; k < oLayer->objects.size(); k++)
+           {
+               if(oLayer->objects[k]->shapeType == RECTANGLE)
+               {
+                  RectangleMapObject* rmo = (RectangleMapObject*)oLayer->objects[k];
+
+                  if(dir == UP) rmo->y -= map->tileHeight;
+                  else if(dir == DOWN) rmo->y += map->tileHeight;
+                  else if(dir == RIGHT) rmo->x += map->tileWidth;
+                  else if(dir == LEFT) rmo->x -= map->tileWidth;
+               }
+           }
+       }
+   }
 }
 
 MapRenderer::~MapRenderer()

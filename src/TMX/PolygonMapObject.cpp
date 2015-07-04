@@ -2,5 +2,5 @@
 
 PolygonMapObject::PolygonMapObject():MapObject()
 {
-    //ctor
+    shapeType = POLYGON;
 }

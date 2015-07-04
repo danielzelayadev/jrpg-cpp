@@ -2,5 +2,5 @@
 
 PolylineMapObject::PolylineMapObject():MapObject()
 {
-    //ctor
+    shapeType = POLYLINE;
 }

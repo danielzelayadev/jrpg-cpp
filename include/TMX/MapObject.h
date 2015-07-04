@@ -9,6 +9,11 @@
 using std::vector;
 using std::string;
 
+enum ShapeType
+{
+   RECTANGLE, ELLIPSE, POLYGON, POLYLINE
+};
+
 class MapObject
 {
     public:
@@ -22,14 +27,20 @@ class MapObject
         int gid;
         bool visible;
 
-        Image* image;
+        int shapeType;
 
-        vector<Property*> properties;
+        Image* image;
 
         friend class TMXParser;
 
+        string getProperty(int i);
+        string getProperty(string name);
+
         private:
-        void copyObj(MapObject mo);
+        void copyObj(MapObject* mo);
+
+        vector<Property*> properties;
+
 };
 
 #endif // MAPOBJECT_H

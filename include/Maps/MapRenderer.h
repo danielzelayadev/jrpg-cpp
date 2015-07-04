@@ -11,6 +11,8 @@ class MapRenderer
         MapRenderer(Map* m, SDL_Renderer* renderer, SDL_Rect* camera);
         ~MapRenderer();
 
+        void update();
+
         void render();
 
         void renderLayer(int index);
@@ -25,6 +27,11 @@ class MapRenderer
         vector<int> widths;
         vector<int> heights;
 
+        int camCachedX;
+        int camCachedY;
+
+        enum dirs { UP, DOWN, RIGHT, LEFT };
+
         int totalScreenTiles;
         int screenTilesX;
         int screenTilesY;
@@ -33,6 +40,8 @@ class MapRenderer
 
         int calculateStartPoint();
         void skipIndx(int& indx);
+
+        void pushObjects(int dir);
 
 };
 

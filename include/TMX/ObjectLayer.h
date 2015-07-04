@@ -18,7 +18,10 @@ class ObjectLayer : public Layer
         MapObject* getObject(int i);
         MapObject* getObject(string name);
 
+        vector<MapObject*> getObjects() { return objects; }
+
         friend class TMXParser;
+        friend class MapRenderer;
 
     private:
         vector<MapObject*> objects;

@@ -613,6 +613,7 @@ bool TMXParser::loadObject(vector<MapObject*>* objects, XMLNode* objectNode)
 
       else if(!strcmp(tmp->Value(), "image"))
       {
+         object.image = new Image();
          if(!loadImageNode(object.image, tmp)) return false;
       }
 
@@ -649,9 +650,10 @@ bool TMXParser::loadObject(vector<MapObject*>* objects, XMLNode* objectNode)
     else if(isPolyline)
     { newObject = new PolylineMapObject(); loadPolylineAttributes((PolylineMapObject*)newObject, cache->ToElement()); }
 
-    newObject->copyObj(object);
+    newObject->copyObj(&object);
 
     objects->push_back(newObject);
+
     return true;
 }
 

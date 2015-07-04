@@ -18,6 +18,21 @@ void TestInput::keyDown(int keycode)
 
     if(keycode == SDLK_LEFT)
        context->camera.x -= context->camMoveX;
+
+    context->cachedPlayerX = context->playerMO->x;
+    context->cachedPlayerY = context->playerMO->y;
+
+    if(keycode == SDLK_w)
+       context->playerMO->y -= context->playerSpeed;
+
+    if(keycode == SDLK_a)
+       context->playerMO->x -= context->playerSpeed;
+
+    if(keycode == SDLK_s)
+       context->playerMO->y += context->playerSpeed;
+
+    if(keycode == SDLK_d)
+       context->playerMO->x += context->playerSpeed;
 }
 
 void TestInput::keyUp(int keycode)
