@@ -16,7 +16,7 @@ void TestScreen::init()
 
    TMXParser parser;
 
-   screenMap = parser.parse("Assets/Screens/TMX Test/FirstMap.tmx");
+   screenMap = parser.parse("Assets/Screens/Test Screen/Maps/FirstMap.tmx");
 
    camMoveX = screenMap->getTileWidth();
    camMoveY = screenMap->getTileHeight();
