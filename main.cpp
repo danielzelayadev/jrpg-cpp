@@ -9,7 +9,5 @@ int main()
 
     sm.run();
 
-//    sm.dispose();
-
     return 0;
 }

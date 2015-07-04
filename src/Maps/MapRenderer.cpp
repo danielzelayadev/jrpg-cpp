@@ -7,68 +7,116 @@
 
 using namespace std;
 
-MapRenderer::MapRenderer(Map* m)
+MapRenderer::MapRenderer(Map* m, SDL_Renderer* renderer, SDL_Rect* camera)
 {
     map = m;
-}
+    this->renderer = renderer;
+    this->camera = camera;
 
-void MapRenderer::render(SDL_Renderer* renderer)
-{
-      for(int i = 0; i < map->getLayerCount(); i++)
-         renderLayer(renderer, i);
-}
+    for(int i = 0; i < map->tilesets.size(); i++)
+    {
+      string pathToTexture = "";
+      string mapPath = m->path;
+      string imageSource = map->tilesets.at(i)->image->source;
+      pathToTexture.append(mapPath);
+      pathToTexture.append("/");
+      pathToTexture.append(imageSource);
 
-void MapRenderer::renderLayer(SDL_Renderer* renderer, int index)
-{
-   Layer* layer = map->getLayer(index);
-
-   SDL_Rect tileRect = {0, 0, map->getTileWidth(), map->getTileHeight()};
-
-   if(layer->isShown())
-   {
-      BlueprintData** blueprint = layer->getBlueprint();
-
-      for(int i = 0; i < map->getTilesY(); i++, tileRect.y += tileRect.h)
-      {
-         tileRect.x = 0;
-         for(int k = 0; k < map->getTilesX(); k++, tileRect.x+=tileRect.w)
-         {
-            if(blueprint[i][k].crop || blueprint[i][k].textureIndex != -1)
-            {
-               if(map->getTextureCount() > 0)
-                 renderFromTxtVector(renderer, blueprint[i][k].textureIndex, tileRect);
-               else if(map->getTileset())
-                 renderFromTileSet(renderer, blueprint[i][k], tileRect);
-            }
-         }
-      }
+      tilesets.push_back(IMG_LoadTexture(renderer, pathToTexture.c_str()));
+      widths.push_back(map->tilesets.at(i)->image->width);
+      heights.push_back(map->tilesets.at(i)->image->height);
     }
+
+
+    if(map->tilesX*map->tileWidth >= camera->w)
+    { screenTilesX = (camera->w / map->tileWidth); if(camera->w % map->tileWidth) screenTilesX++; }
+    else
+           screenTilesX = map->tilesX;
+
+    if(map->tilesY*map->tileHeight >= camera->h)
+    { screenTilesY = (camera->h / map->tileHeight); if(camera->h % map->tileHeight) screenTilesY++; }
+    else
+           screenTilesY = map->tilesY;
+
+    totalScreenTiles = screenTilesX*screenTilesY;
+    cout << totalScreenTiles << endl;
 }
 
-void MapRenderer::renderFromTxtVector(SDL_Renderer* renderer, short val, SDL_Rect tileRect)
+void MapRenderer::render()
 {
-   SDL_RenderCopy(renderer, map->getTexture(val), 0, &tileRect);
+      for(int i = 0; i < map->layers.size(); i++)
+         renderLayer(i);
 }
-//[10,5]{250,300,100,100}(5,5)-px
-//[10,5]15{250,300,100,100}(5,5)-px
-//[10,5]15{250,300,100,100}(5,5)-tl
-//[10,5]15{250,300,100,100}(5,5)-tl
-//Cambiar de BlueprintData a tile y hacerla una clase y que tengan properties y otras funciones
-void MapRenderer::renderFromTileSet(SDL_Renderer* renderer, BlueprintData bd, SDL_Rect tileRect)
+
+void MapRenderer::renderLayer(int index)
 {
-   SDL_Rect crop;
+   Layer* layer = map->layers.at(index);
 
-   if(bd.crop) {crop = {bd.cropX, bd.cropY, bd.cropW, bd.cropH}; tileRect.w = crop.w; tileRect.h = crop.h;}
-
-   else
+   if(layer->type == 'L' && layer->visible)
    {
-      short val = bd.textureIndex;
-      int rowMax = map->getTilesetWidth()/map->getTileWidth();
-      int rowIndx = val / rowMax;
-      int colIndx = abs((rowIndx*rowMax)-val);
+      tileRect = {0, 0, map->tileWidth, map->tileHeight};
 
-      crop = {colIndx*map->getTileWidth(), rowIndx*map->getTileHeight(), tileRect.w, tileRect.h};
+      short* blueprint = layer->data;
+
+      int x = 0;
+
+      for(int i = 0, indx = calculateStartPoint(); i < totalScreenTiles; i++)
+      {
+         if(blueprint[indx])
+           renderFromTileSet(blueprint[indx], tileRect);
+         x++;
+         indx++;
+
+         tileRect.x += tileRect.w;
+         if(x % screenTilesX == 0) { skipIndx(indx); x = 0; tileRect.x = 0; tileRect.y += tileRect.h; }
+      }
+
+   }
+}
+
+void MapRenderer::renderFromTileSet(short gid, SDL_Rect tileRect)
+{
+   int val = gid-1;
+
+   int tilesetIndx = 0;
+   int rowMax = 0;
+   int colMax = 0;
+
+   for(int i = 0; i < tilesets.size(); i++)
+   {
+      int tilesetW = widths.at(i), tilesetH = heights.at(i);
+      rowMax = tilesetW/map->tileWidth;
+      colMax = tilesetH/map->tileHeight;
+
+      if(val < colMax*rowMax) { tilesetIndx = i; break; }
    }
 
-   SDL_RenderCopy(renderer, map->getTileset(), &crop, &tileRect);
+   int rowIndx = val/ rowMax;
+   int colIndx = abs( (rowIndx*rowMax)-val );
+
+   SDL_Rect crop = {colIndx*map->tileWidth, rowIndx*map->tileHeight, tileRect.w, tileRect.h};
+   SDL_RenderCopy( renderer, tilesets.at(tilesetIndx), &crop, &tileRect);
+}
+
+int MapRenderer::calculateStartPoint()
+{
+   int rowIndx = (camera->y / map->tileHeight);
+   int colIndx = camera->x / map->tileWidth;
+   int startIndx = (rowIndx * map->tilesX) + colIndx;
+
+   return startIndx;
+}
+
+void MapRenderer::skipIndx(int& indx)
+{
+    int diffX = map->tilesX - screenTilesX;
+
+    if(diffX)
+    indx += diffX;
+}
+
+MapRenderer::~MapRenderer()
+{
+   for(int i = 0; i < tilesets.size(); i++)
+      SDL_DestroyTexture(tilesets.at(i));
 }

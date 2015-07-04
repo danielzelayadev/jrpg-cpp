@@ -6,12 +6,15 @@ ScreenManager::ScreenManager(string windowTitle, int w, int h)
     currentScreen = nullptr;
     done = false;
 
+    setWindowWidth(w);
+    setWindowHeight(h);
+
     SDL_Init(SDL_INIT_EVERYTHING);
     IMG_Init(IMG_INIT_PNG | IMG_INIT_JPG | IMG_INIT_TIF | IMG_INIT_WEBP);
 
     window = SDL_CreateWindow(windowTitle.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, w, h, SDL_WINDOW_SHOWN);
 
-    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 
 }
 
@@ -101,6 +104,7 @@ void ScreenManager::setCurrentScreen(Screen* screen)
 
 void ScreenManager::dispose()
 {
+   currentScreen->dispose();
    delete currentScreen;
 
    SDL_DestroyRenderer(renderer);

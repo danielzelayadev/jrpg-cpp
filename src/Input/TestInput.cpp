@@ -7,6 +7,17 @@ TestInput::TestInput(Screen* context)
 
 void TestInput::keyDown(int keycode)
 {
+    if(keycode == SDLK_DOWN)
+       context->camera.y += context->camMoveY;
+
+    if(keycode == SDLK_UP)
+       context->camera.y -= context->camMoveY;
+
+    if(keycode == SDLK_RIGHT)
+       context->camera.x += context->camMoveX;
+
+    if(keycode == SDLK_LEFT)
+       context->camera.x -= context->camMoveX;
 }
 
 void TestInput::keyUp(int keycode)
