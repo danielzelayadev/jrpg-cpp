@@ -23,20 +23,22 @@ void TestInput::keyDown(int keycode)
     context->cachedPlayerY = context->playerMO->y;
 
     if(keycode == SDLK_w)
-       context->playerMO->y -= context->playerSpeed;
+       { context->playerMO->y -= context->playerSpeed; context->dir = UP; context->play = true; }
 
     if(keycode == SDLK_a)
-       context->playerMO->x -= context->playerSpeed;
+       { context->playerMO->x -= context->playerSpeed; context->dir = LEFT; context->play = true; }
 
     if(keycode == SDLK_s)
-       context->playerMO->y += context->playerSpeed;
+       { context->playerMO->y += context->playerSpeed; context->dir = DOWN; context->play = true; }
 
     if(keycode == SDLK_d)
-       context->playerMO->x += context->playerSpeed;
+       { context->playerMO->x += context->playerSpeed; context->dir = RIGHT; context->play = true; }
 }
 
 void TestInput::keyUp(int keycode)
 {
+    if(keycode == SDLK_w || keycode == SDLK_a || keycode == SDLK_s || keycode == SDLK_d)
+       context->play = false;
 }
 
 void TestInput::keyTyped(char character)

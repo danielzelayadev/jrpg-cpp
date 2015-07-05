@@ -7,6 +7,11 @@
 
 #include "TMX/RectangleMapObject.h"
 
+enum Dirs
+{
+   DOWN, LEFT, RIGHT, UP
+};
+
 class TestScreen : public Screen
 {
     public:
@@ -19,7 +24,7 @@ class TestScreen : public Screen
         Map* screenMap;
         MapRenderer* mRenderer;
 
-        SDL_Rect camera;
+        SDL_Rect camera, frame;
 
         RectangleMapObject* playerMO;
         SDL_Texture* playerSS;
@@ -27,10 +32,19 @@ class TestScreen : public Screen
         int cachedPlayerX, cachedPlayerY;
         int playerSpeed = 5;
 
+        int framesX, framesY;
+
+        bool play = false;
+        int dir = -1;
+        int switchFrame = 8;
+        int frameCtr = 0;
+
         int camMoveX;
         int camMoveY;
 
         void wrapCamera();
+        void animate();
+        void stopAnimations();
         bool collisions();
 
         void init();
