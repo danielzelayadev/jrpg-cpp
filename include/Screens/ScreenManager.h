@@ -7,6 +7,9 @@
 #include <SDL2/SDL_image.h>
 #include <string>
 
+#define FPS 60.0
+#define TICKS_PER_FRAME 1000.0 / FPS
+
 #include "Timer.h"
 
 using namespace std;
@@ -36,7 +39,7 @@ class ScreenManager
         private:
         Screen* currentScreen;
 
-        Timer* timer;
+        Timer* fpsTimer, *capTimer;
 
         string windowTitle;
         int windowWidth, windowHeight;
@@ -49,7 +52,7 @@ class ScreenManager
         void dispose();
 
         void calculateFPS(int frameCount);
-
+        void capFPS();
 };
 
 #endif // SCREENMANAGER_H

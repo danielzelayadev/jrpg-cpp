@@ -13,21 +13,23 @@ ScreenManager::ScreenManager(string windowTitle, int w, int h)
     IMG_Init(IMG_INIT_PNG | IMG_INIT_JPG | IMG_INIT_TIF | IMG_INIT_WEBP);
 
     window = SDL_CreateWindow(windowTitle.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, w, h,
-                              SDL_WINDOW_SHOWN | SDL_RENDERER_PRESENTVSYNC);
+                              SDL_WINDOW_SHOWN);
 
-    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
 
-    timer = new Timer();
-
+    fpsTimer = new Timer();
+    capTimer = new Timer();
 }
 
 void ScreenManager::run()
 {
 
    int frameCount = 0;
-   timer->start();
+   fpsTimer->start();
    while(!done)
    {
+      capTimer->start();
+
       handleInput();
 
       calculateFPS(frameCount);
@@ -36,6 +38,7 @@ void ScreenManager::run()
       render();
 
       frameCount++;
+      capFPS();
    }
 
    dispose();
@@ -114,7 +117,8 @@ void ScreenManager::setCurrentScreen(Screen* screen)
 
 void ScreenManager::dispose()
 {
-   delete timer;
+   delete fpsTimer;
+   delete capTimer;
 
    currentScreen->dispose();
    delete currentScreen;
@@ -158,10 +162,19 @@ int ScreenManager::getWindowHeight()
 
 void ScreenManager::calculateFPS(int frameCount)
 {
-   float avgFPS = frameCount / ( timer->getTicks() / 1000.f );
+   float avgFPS = frameCount / ( fpsTimer->getTicks() / 1000.f );
 
       if( avgFPS > 2000000 )
         avgFPS = 0;
 
       cout << avgFPS << endl;
+}
+
+void ScreenManager::capFPS()
+{
+    int frameTicks = capTimer->getTicks();
+
+    if( frameTicks < TICKS_PER_FRAME)
+      SDL_Delay( TICKS_PER_FRAME - frameTicks );
+
 }
