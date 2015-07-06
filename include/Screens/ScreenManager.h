@@ -7,6 +7,8 @@
 #include <SDL2/SDL_image.h>
 #include <string>
 
+#include "Timer.h"
+
 using namespace std;
 
 class ScreenManager
@@ -34,6 +36,8 @@ class ScreenManager
         private:
         Screen* currentScreen;
 
+        Timer* timer;
+
         string windowTitle;
         int windowWidth, windowHeight;
 
@@ -43,6 +47,8 @@ class ScreenManager
         void update();
         void render();
         void dispose();
+
+        void calculateFPS(int frameCount);
 
 };
 
