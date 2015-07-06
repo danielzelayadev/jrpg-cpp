@@ -45,6 +45,19 @@ void Animation::animate()
           }
 
           setCurrentFrame(row, col);
+          timer.stop();
+          timer.start();
        }
    }
+}
+
+void Animation::stop()
+{
+   timer.stop();
+
+   if(direction == HORIZONTAL)
+   setCurrentFrame(-1, 0);
+
+   else if(direction == VERTICAL)
+   setCurrentFrame(0, -1);
 }

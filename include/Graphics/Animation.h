@@ -23,7 +23,7 @@ class Animation
         void play() { timer.start(); }
         void pause() { timer.pause(); }
         void resume() { timer.resume(); }
-        void stop() { timer.stop(); }
+        void stop();
 
         void setAnimationSpeed(Uint32 ms) { this->ms = ms; }
         Uint32 setAnimationSpeed() { return ms; }

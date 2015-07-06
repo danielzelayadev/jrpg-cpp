@@ -23,22 +23,52 @@ void TestInput::keyDown(int keycode)
     context->cachedPlayerY = context->playerMO->y;
 
     if(keycode == SDLK_w)
-       { context->playerMO->y -= context->playerSpeed; context->dir = UP; context->play = true; }
+    {
+      context->playerMO->y -= context->playerSpeed;
+
+      if(!context->anim->isPlaying())
+      {
+       context->anim->setCurrentFrame(UP, 0);
+       context->anim->play();
+      }
+
+    }
 
     if(keycode == SDLK_a)
-       { context->playerMO->x -= context->playerSpeed; context->dir = LEFT; context->play = true; }
+    {
+      context->playerMO->x -= context->playerSpeed;
+      if(!context->anim->isPlaying())
+      {
+       context->anim->setCurrentFrame(LEFT, 0);
+       context->anim->play();
+      }
+    }
 
     if(keycode == SDLK_s)
-       { context->playerMO->y += context->playerSpeed; context->dir = DOWN; context->play = true; }
+    {
+      context->playerMO->y += context->playerSpeed;
+      if(!context->anim->isPlaying())
+      {
+        context->anim->setCurrentFrame(DOWN, 0);
+        context->anim->play();
+      }
+    }
 
     if(keycode == SDLK_d)
-       { context->playerMO->x += context->playerSpeed; context->dir = RIGHT; context->play = true; }
+    {
+      context->playerMO->x += context->playerSpeed;
+      if(!context->anim->isPlaying())
+      {
+        context->anim->setCurrentFrame(RIGHT, 0);
+        context->anim->play();
+      }
+    }
 }
 
 void TestInput::keyUp(int keycode)
 {
     if(keycode == SDLK_w || keycode == SDLK_a || keycode == SDLK_s || keycode == SDLK_d)
-       context->play = false;
+       context->anim->stop();
 }
 
 void TestInput::keyTyped(char character)

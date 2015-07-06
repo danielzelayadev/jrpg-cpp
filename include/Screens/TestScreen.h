@@ -7,6 +7,8 @@
 
 #include "TMX/RectangleMapObject.h"
 
+#include "Animation.h"
+
 enum Dirs
 {
    DOWN, LEFT, RIGHT, UP
@@ -29,22 +31,20 @@ class TestScreen : public Screen
         RectangleMapObject* playerMO;
         SDL_Texture* playerSS;
         int frameW, frameH;
+        int animationSpeed;
         int cachedPlayerX, cachedPlayerY;
-        int playerSpeed = 5;
+        int playerSpeed = 3;
 
         int framesX, framesY;
 
-        bool play = false;
+        Animation* anim;
+
         int dir = -1;
-        int switchFrame = 8;
-        int frameCtr = 0;
 
         int camMoveX;
         int camMoveY;
 
         void wrapCamera();
-        void animate();
-        void stopAnimations();
         bool collisions();
 
         void init();

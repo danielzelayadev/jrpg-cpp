@@ -51,20 +51,24 @@ void TestScreen::init()
    strm << playerMO->getProperty("FramesY");
    strm >> framesY;
 
+   strm.clear();
+
+   strm << playerMO->getProperty("Animation Speed");
+   strm >> animationSpeed;
+
    frame = {0, 0, frameW, frameH};
+
+   anim = new Animation(framesX, framesY, frameW, frameH, animationSpeed, HORIZONTAL);
 
    mRenderer = new MapRenderer(screenMap, sm->renderer, &camera);
 }
 
 void TestScreen::update()
 {
-   if(play)
-     animate();
-
-   else stopAnimations();
-
+   anim->animate();
    wrapCamera();
    mRenderer->update();
+
    if(collisions())
     { playerMO->x = cachedPlayerX; playerMO->y = cachedPlayerY; } //Deberia de haber una accion especifica para cada colision
 }
@@ -74,6 +78,7 @@ void TestScreen::render()
    mRenderer->renderLayer(0);
 
    SDL_Rect pr = {playerMO->x, playerMO->y, playerMO->width, playerMO->height};
+   frame = anim->getCurrentFrame();
 
    SDL_RenderCopy(sm->renderer, playerSS, &frame, &pr);
 
@@ -83,6 +88,7 @@ void TestScreen::render()
 void TestScreen::dispose()
 {
    SDL_DestroyTexture(playerSS);
+   delete anim;
    delete playerMO;
    delete input;
    delete mRenderer;
@@ -102,28 +108,6 @@ void TestScreen::wrapCamera()
 
     if(camera.y < 0)
        camera.y = 0;
-}
-
-void TestScreen::animate()
-{
-   frame.y = frame.h * dir;
-
-   if(frameCtr >= switchFrame)
-   {
-      frame.x += frame.w;
-
-      if(frame.x >= (frame.w * framesX)) frame.x = 0;
-
-      frameCtr = 0;
-   }
-
-   frameCtr++;
-}
-
-void TestScreen::stopAnimations()
-{
-    frameCtr = 0;
-    frame.x = 0;
 }
 
 bool TestScreen::collisions()
