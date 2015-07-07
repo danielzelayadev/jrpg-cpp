@@ -5,9 +5,7 @@
 #include "TMX/Map.h"
 #include "MapRenderer.h"
 
-#include "TMX/RectangleMapObject.h"
-
-#include "Animation.h"
+#include "Player.h"
 
 enum Dirs
 {
@@ -26,20 +24,11 @@ class TestScreen : public Screen
         Map* screenMap;
         MapRenderer* mRenderer;
 
-        SDL_Rect camera, frame;
+        SDL_Rect camera;
 
-        RectangleMapObject* playerMO;
-        SDL_Texture* playerSS;
-        int frameW, frameH;
-        int animationSpeed;
+        Player* player;
+
         int cachedPlayerX, cachedPlayerY;
-        int playerSpeed = 3;
-
-        int framesX, framesY;
-
-        Animation* anim;
-
-        int dir = -1;
 
         int camMoveX;
         int camMoveY;

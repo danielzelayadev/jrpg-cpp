@@ -19,56 +19,28 @@ void TestInput::keyDown(int keycode)
     if(keycode == SDLK_LEFT)
        context->camera.x -= context->camMoveX;
 
-    context->cachedPlayerX = context->playerMO->x;
-    context->cachedPlayerY = context->playerMO->y;
+    Player* player = context->player;
+
+    context->cachedPlayerX = player->getX();
+    context->cachedPlayerY = player->getY();
 
     if(keycode == SDLK_w)
-    {
-      context->playerMO->y -= context->playerSpeed;
-
-      if(!context->anim->isPlaying())
-      {
-       context->anim->setCurrentFrame(UP, 0);
-       context->anim->play();
-      }
-
-    }
+       player->walk(WALK_UP);
 
     if(keycode == SDLK_a)
-    {
-      context->playerMO->x -= context->playerSpeed;
-      if(!context->anim->isPlaying())
-      {
-       context->anim->setCurrentFrame(LEFT, 0);
-       context->anim->play();
-      }
-    }
+       player->walk(WALK_LEFT);
 
     if(keycode == SDLK_s)
-    {
-      context->playerMO->y += context->playerSpeed;
-      if(!context->anim->isPlaying())
-      {
-        context->anim->setCurrentFrame(DOWN, 0);
-        context->anim->play();
-      }
-    }
+       player->walk(WALK_DOWN);
 
     if(keycode == SDLK_d)
-    {
-      context->playerMO->x += context->playerSpeed;
-      if(!context->anim->isPlaying())
-      {
-        context->anim->setCurrentFrame(RIGHT, 0);
-        context->anim->play();
-      }
-    }
+       player->walk(WALK_RIGHT);
 }
 
 void TestInput::keyUp(int keycode)
 {
     if(keycode == SDLK_w || keycode == SDLK_a || keycode == SDLK_s || keycode == SDLK_d)
-       context->anim->stop();
+       context->player->getMovementAnim()->stop();
 }
 
 void TestInput::keyTyped(char character)

@@ -5,11 +5,13 @@
 
 using namespace std;
 
-Player::Player(RectangleMapObject* obj)
+Player::Player(SDL_Renderer* renderer, RectangleMapObject* obj)
 {
     this->playerObject = obj;
 
     loadMOProperties();
+
+    spritesheet = IMG_LoadTexture(renderer, spritesheetSrc.c_str());
 }
 
 void Player::loadMOProperties()

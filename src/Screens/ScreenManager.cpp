@@ -162,12 +162,10 @@ int ScreenManager::getWindowHeight()
 
 void ScreenManager::calculateFPS(int frameCount)
 {
-   float avgFPS = frameCount / ( fpsTimer->getTicks() / 1000.f );
+   avgFPS = frameCount / ( fpsTimer->getTicks() / 1000.f );
 
       if( avgFPS > 2000000 )
         avgFPS = 0;
-
-      cout << avgFPS << endl;
 }
 
 void ScreenManager::capFPS()

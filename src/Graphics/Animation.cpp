@@ -1,5 +1,7 @@
 #include "Animation.h"
+#include <iostream>
 
+using namespace std;
 Animation::Animation(int framesX, int framesY, int frameW, int frameH, Uint32 ms, int direction)
 {
      this->framesX = framesX;
@@ -36,6 +38,7 @@ void Animation::animate()
           {
              col++;
              if(col >= framesX) col = 0;
+             cout << col << endl;
           }
 
           else if(direction == VERTICAL)

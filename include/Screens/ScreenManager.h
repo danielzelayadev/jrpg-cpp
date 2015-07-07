@@ -36,10 +36,14 @@ class ScreenManager
         int getWindowWidth();
         int getWindowHeight();
 
+        int getFPS() { return avgFPS; }
+
         private:
         Screen* currentScreen;
 
         Timer* fpsTimer, *capTimer;
+
+        float avgFPS;
 
         string windowTitle;
         int windowWidth, windowHeight;

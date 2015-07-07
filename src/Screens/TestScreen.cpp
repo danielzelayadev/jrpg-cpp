@@ -23,73 +23,37 @@ void TestScreen::init()
    camMoveX = screenMap->getTileWidth();
    camMoveY = screenMap->getTileHeight();
 
-   playerMO = (RectangleMapObject*)
-                    ((ObjectLayer*)screenMap->getLayer("objects"))->getObject("Player");
+   player = new Player(sm->renderer,
+    (RectangleMapObject*) ((ObjectLayer*)screenMap->getLayer("objects"))->getObject("Player") );
 
-   cachedPlayerX = playerMO->x;
-   cachedPlayerY = playerMO->y;
-
-   playerSS = IMG_LoadTexture(sm->renderer, playerMO->getProperty("Spritesheet").c_str());
-
-   stringstream strm;
-
-   strm << playerMO->getProperty("FrameW");
-   strm >> frameW;
-
-   strm.clear();
-
-   strm << playerMO->getProperty("FrameH");
-   strm >> frameH;
-
-   strm.clear();
-
-   strm << playerMO->getProperty("FramesX");
-   strm >> framesX;
-
-   strm.clear();
-
-   strm << playerMO->getProperty("FramesY");
-   strm >> framesY;
-
-   strm.clear();
-
-   strm << playerMO->getProperty("Animation Speed");
-   strm >> animationSpeed;
-
-   frame = {0, 0, frameW, frameH};
-
-   anim = new Animation(framesX, framesY, frameW, frameH, animationSpeed, HORIZONTAL);
+   cachedPlayerX = player->getX();
+   cachedPlayerY = player->getY();
 
    mRenderer = new MapRenderer(screenMap, sm->renderer, &camera);
 }
 
 void TestScreen::update()
 {
-   anim->animate();
+   player->update();
    wrapCamera();
    mRenderer->update();
 
    if(collisions())
-    { playerMO->x = cachedPlayerX; playerMO->y = cachedPlayerY; } //Deberia de haber una accion especifica para cada colision
+   { player->setX(cachedPlayerX); player->setY(cachedPlayerY); } //Deberia de haber una accion especifica para cada colision
 }
 
 void TestScreen::render()
 {
    mRenderer->renderLayer(0);
 
-   SDL_Rect pr = {playerMO->x, playerMO->y, playerMO->width, playerMO->height};
-   frame = anim->getCurrentFrame();
-
-   SDL_RenderCopy(sm->renderer, playerSS, &frame, &pr);
+   player->render(sm->renderer);
 
    mRenderer->renderLayer(2);
 }
 
 void TestScreen::dispose()
 {
-   SDL_DestroyTexture(playerSS);
-   delete anim;
-   delete playerMO;
+   delete player;
    delete input;
    delete mRenderer;
    delete screenMap;
@@ -112,7 +76,9 @@ void TestScreen::wrapCamera()
 
 bool TestScreen::collisions()
 {
-    vector<MapObject*> objects = ((ObjectLayer*)screenMap->getLayer("objects"))->getObjects();
+    RectangleMapObject* playerMO = player->getMapObject();
+
+    vector<MapObject*> objects =  ( (ObjectLayer*)screenMap->getLayer("objects") )->getObjects();
 
     for(int i = 0; i < objects.size(); i++)
     {
