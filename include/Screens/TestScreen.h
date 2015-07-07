@@ -6,6 +6,7 @@
 #include "MapRenderer.h"
 
 #include "Player.h"
+#include "NPC.h"
 
 enum Dirs
 {
@@ -27,6 +28,7 @@ class TestScreen : public Screen
         SDL_Rect camera;
 
         Player* player;
+        NPC* npc;
 
         int cachedPlayerX, cachedPlayerY;
 

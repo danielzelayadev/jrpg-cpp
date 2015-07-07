@@ -38,7 +38,6 @@ void Animation::animate()
           {
              col++;
              if(col >= framesX) col = 0;
-             cout << col << endl;
           }
 
           else if(direction == VERTICAL)

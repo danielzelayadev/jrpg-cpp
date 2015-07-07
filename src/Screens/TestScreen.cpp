@@ -26,6 +26,9 @@ void TestScreen::init()
    player = new Player(sm->renderer,
     (RectangleMapObject*) ((ObjectLayer*)screenMap->getLayer("objects"))->getObject("Player") );
 
+   npc = new NPC(sm->renderer,
+    (RectangleMapObject*) ((ObjectLayer*)screenMap->getLayer("objects"))->getObject("Enemy"));
+
    cachedPlayerX = player->getX();
    cachedPlayerY = player->getY();
 
@@ -35,6 +38,7 @@ void TestScreen::init()
 void TestScreen::update()
 {
    player->update();
+   npc->update();
    wrapCamera();
    mRenderer->update();
 
@@ -47,6 +51,7 @@ void TestScreen::render()
    mRenderer->renderLayer(0);
 
    player->render(sm->renderer);
+   npc->render(sm->renderer);
 
    mRenderer->renderLayer(2);
 }
@@ -54,6 +59,7 @@ void TestScreen::render()
 void TestScreen::dispose()
 {
    delete player;
+   delete npc;
    delete input;
    delete mRenderer;
    delete screenMap;
