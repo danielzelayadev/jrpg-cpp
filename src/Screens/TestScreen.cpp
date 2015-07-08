@@ -8,6 +8,8 @@
 
 #include <iostream>
 
+#include <fstream>
+
 using namespace std;
 
 void TestScreen::init()
@@ -33,6 +35,15 @@ void TestScreen::init()
    cachedPlayerY = player->getY();
 
    mRenderer = new MapRenderer(screenMap, sm->renderer, &camera);
+
+   string diagDir = npc->getMapObject()->getProperty("Dialogue");
+   string text = "";
+   loadDialogue(diagDir, &text);
+
+   int h = 150;
+   int sp = 50;
+   SDL_Rect r = {0, sm->getWindowHeight() - h, sm->getWindowWidth(), h};
+   db = new DialogueBox(sm->renderer, text, r);
 }
 
 void TestScreen::update()
@@ -54,12 +65,15 @@ void TestScreen::render()
    npc->render(sm->renderer);
 
    mRenderer->renderLayer(2);
+
+   db->render();
 }
 
 void TestScreen::dispose()
 {
    delete player;
    delete npc;
+   delete db;
    delete input;
    delete mRenderer;
    delete screenMap;
@@ -99,4 +113,15 @@ bool TestScreen::collisions()
     }
 
     return false;
+}
+
+void TestScreen::loadDialogue(string dir, string* text)
+{
+     fstream diagFile(dir);
+
+     if(diagFile.is_open())
+     {
+         getline(diagFile, *text);
+         diagFile.close();
+     }
 }

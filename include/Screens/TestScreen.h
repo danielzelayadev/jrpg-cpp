@@ -8,6 +8,8 @@
 #include "Player.h"
 #include "NPC.h"
 
+#include "DialogueBox.h"
+
 enum Dirs
 {
    DOWN, LEFT, RIGHT, UP
@@ -24,6 +26,8 @@ class TestScreen : public Screen
 
         Map* screenMap;
         MapRenderer* mRenderer;
+
+        DialogueBox* db;
 
         SDL_Rect camera;
 
@@ -42,6 +46,8 @@ class TestScreen : public Screen
         void update();
         void render();
         void dispose();
+
+        void loadDialogue(string dir, string* text);
 };
 
 #endif // TESTSCREEN_H

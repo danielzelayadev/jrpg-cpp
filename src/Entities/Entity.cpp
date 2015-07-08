@@ -72,6 +72,4 @@ void Entity::render(SDL_Renderer* renderer)
 
 Entity::~Entity()
 {
-   SDL_DestroyTexture(spritesheet);
-   delete movements;
 }

@@ -17,6 +17,10 @@
 					<Add directory="include/Screens" />
 					<Add directory="include/Input" />
 					<Add directory="include/Maps" />
+					<Add directory="include/Utils" />
+					<Add directory="include/Graphics" />
+					<Add directory="include/Entities" />
+					<Add directory="include/UI" />
 				</Compiler>
 			</Target>
 			<Target title="Release">
@@ -30,6 +34,10 @@
 					<Add directory="include/Screens" />
 					<Add directory="include/Input" />
 					<Add directory="include/Maps" />
+					<Add directory="include/Utils" />
+					<Add directory="include/Graphics" />
+					<Add directory="include/Entities" />
+					<Add directory="include/UI" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
@@ -40,6 +48,10 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
+		<Unit filename="include/Entities/Entity.h" />
+		<Unit filename="include/Entities/NPC.h" />
+		<Unit filename="include/Entities/Player.h" />
+		<Unit filename="include/Graphics/Animation.h" />
 		<Unit filename="include/Input/Input.h" />
 		<Unit filename="include/Input/TestInput.h" />
 		<Unit filename="include/Maps/MapRenderer.h" />
@@ -65,8 +77,14 @@
 		<Unit filename="include/TMX/TileOffset.h" />
 		<Unit filename="include/TMX/Tileset.h" />
 		<Unit filename="include/UI/Button.h" />
+		<Unit filename="include/UI/DialogueBox.h" />
 		<Unit filename="include/UI/UI.h" />
+		<Unit filename="include/Utils/Timer.h" />
 		<Unit filename="main.cpp" />
+		<Unit filename="src/Entities/Entity.cpp" />
+		<Unit filename="src/Entities/NPC.cpp" />
+		<Unit filename="src/Entities/Player.cpp" />
+		<Unit filename="src/Graphics/Animation.cpp" />
 		<Unit filename="src/Input/Input.cpp" />
 		<Unit filename="src/Input/TestInput.cpp" />
 		<Unit filename="src/Maps/MapRenderer.cpp" />
@@ -92,7 +110,9 @@
 		<Unit filename="src/TMX/TileOffset.cpp" />
 		<Unit filename="src/TMX/Tileset.cpp" />
 		<Unit filename="src/UI/Button.cpp" />
+		<Unit filename="src/UI/DialogueBox.cpp" />
 		<Unit filename="src/UI/UI.cpp" />
+		<Unit filename="src/Utils/Timer.cpp" />
 		<Extensions>
 			<code_completion />
 			<debugger />

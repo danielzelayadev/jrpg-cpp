@@ -11,6 +11,7 @@ ScreenManager::ScreenManager(string windowTitle, int w, int h)
 
     SDL_Init(SDL_INIT_EVERYTHING);
     IMG_Init(IMG_INIT_PNG | IMG_INIT_JPG | IMG_INIT_TIF | IMG_INIT_WEBP);
+    TTF_Init();
 
     window = SDL_CreateWindow(windowTitle.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, w, h,
                               SDL_WINDOW_SHOWN);
@@ -128,6 +129,7 @@ void ScreenManager::dispose()
 
    IMG_Quit();
    SDL_Quit();
+   TTF_Quit();
 }
 
 void ScreenManager::setWindowTitle(string title)
